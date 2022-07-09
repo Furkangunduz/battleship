@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@500&family=Red+Hat+Display&family=Roboto:wght@300;400;500;700;900&display=swap');
+* {
+	font-family: 'Roboto', sans-serif;
+}
+
+#root {
+	height: 100vh;
+	gap: 100px;
+}
+
+.board {
+	height: 528px;
+	width: 528px;
+	display: grid;
+	grid-template-columns: repeat(11, 1fr);
+}
+
+.square {
+	display: flex;
+	width: 48px;
+	height: 48px;
+	background: url('/src/assets/water.svg') no-repeat;
+	background-size: cover;
+	background-position: center;
+}
+
+.guide {
+	background-color: #2a2e3a;
+	display: grid;
+	width: 48px;
+	height: 48px;
+	place-content: center;
+	color: #fff;
+	font-size: 12px;
+}
+.ship {
+	display: inline;
+}
