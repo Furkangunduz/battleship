@@ -33,6 +33,10 @@
 	color: #fff;
 	font-size: 12px;
 }
+
+.shiplist {
+	display: flex;
+}
 .ship {
-	display: inline;
+	z-index: 1;
 }
