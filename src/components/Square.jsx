@@ -3,42 +3,38 @@ import { ReactComponent as Ship2 } from '../assets/ship-2.svg';
 import { ReactComponent as Ship3 } from '../assets/ship-3.svg';
 import { ReactComponent as Ship4 } from '../assets/ship-4.svg';
 import { ReactComponent as Ship5 } from '../assets/ship-5.svg';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { useDrop } from 'react-dnd';
 
 import ShipContext from '../ShipContext';
 import Ship from './Ship';
 
-function Square({ x, y, classname, children, isShipHere }) {
-	const { shipPosition, moveShip, shipType } = useContext(ShipContext);
+function Square({ x, y, classname, shiptype, isShipHere }) {
+	const { shipType, shipsInfo, updateShipsInfo } = useContext(ShipContext);
 
 	const [{ isOver }, drop] = useDrop(
 		() => ({
 			accept: 'ship',
-			drop: () => moveShip(x, y, shipType),
+			drop: () => updateShipsInfo(shiptype, x, y),
 			collect: (monitor) => ({
 				isOver: !!monitor.isOver(),
 			}),
 		}),
-		[shipPosition[0], shipPosition[1]]
+		[shipsInfo[shipType][0], shipsInfo[shipType][1]]
 	);
 
 	const renderShip = () => {
-		if (shipType == 1) return <Ship1 />;
-		if (shipType == 2) return <Ship2 />;
-		if (shipType == 3) return <Ship3 />;
-		if (shipType == 4) return <Ship4 />;
-		if (shipType == 5) return <Ship5 />;
-		if (shipType == 0) return <></>;
+		if (shiptype == 1) return <Ship1 />;
+		if (shiptype == 2) return <Ship2 />;
+		if (shiptype == 3) return <Ship3 />;
+		if (shiptype == 4) return <Ship4 />;
+		if (shiptype == 5) return <Ship5 />;
+		if (shiptype == 0) return <></>;
 	};
+
 	return (
-		<div
-			ref={drop}
-			style={{
-				position: 'relative',
-			}}
-			className={classname}>
-			{isShipHere && <Ship>{renderShip()}</Ship>}
+		<div ref={drop} className={classname}>
+			{isShipHere && <Ship shiptype={shiptype}>{renderShip()}</Ship>}
 		</div>
 	);
 }
