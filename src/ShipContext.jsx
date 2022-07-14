@@ -4,28 +4,61 @@ const ShipContext = createContext();
 
 export const ShipProvider = ({ children }) => {
 	const [shipsInfo, setShipsInfo] = useState({
-		'0': [-10, -10],
-		'1': [-1, -1],
-		'2': [-1, -1],
-		'3': [-1, -1],
-		'4': [-1, -1],
-		'5': [-1, -1],
+		'0': [-1, -1],
+		'1': [-1, -1, 'horizontal', 2], //[x , y , direction , lengthofShip ]
+		'2': [-1, -1, 'horizontal', 3],
+		'3': [-1, -1, 'horizontal', 3],
+		'4': [-1, -1, 'horizontal', 4],
+		'5': [-1, -1, 'horizontal', 5],
 	});
-
 	const [shipType, setShipType] = useState('0');
 
 	const updateShipsInfo = (type, toX, toY) => {
-		setShipsInfo((prev) => ({ ...prev, [`${type}`]: [toX, toY] }));
+		let direction = shipsInfo[`${type}`][2];
+		let shipLength = shipsInfo[`${type}`][3];
+
+		if (direction == 'horizontal') {
+			if (toX - 1 + shipLength > 10) {
+				toX = 10 - shipLength + 1;
+			}
+		}
+		if (direction == 'vertical') {
+			if (toY - 1 + shipLength > 10) {
+				console.log('cannot go', toY);
+				toY = 10 - shipLength + 1;
+			}
+		}
+
+		setShipsInfo((prev) => ({ ...prev, [`${type}`]: [toX, toY, direction, shipLength] }));
 	};
 
 	const changeShipType = (type) => {
 		setShipType(type);
-		console.log('type changed : ' + type);
 	};
-	// const moveShip = (x, y) => {
-	// 	setShipPosition([x, y]);
-	// 	console.log(shipPosition, 'type: ' + shipType);
-	// };
+
+	const rotateShip = (type) => {
+		let direction = shipsInfo[type][2];
+		if (direction == 'vertical')
+			setShipsInfo((prev) => ({
+				...prev,
+				[`${type}`]: [
+					shipsInfo[type][0],
+					shipsInfo[type][1],
+					'horizontal',
+					shipsInfo[type][3],
+				],
+			}));
+		if (direction == 'horizontal')
+			setShipsInfo((prev) => ({
+				...prev,
+				[`${type}`]: [
+					shipsInfo[type][0],
+					shipsInfo[type][1],
+					'vertical',
+					shipsInfo[type][3],
+				],
+			}));
+	};
 
 	return (
 		<ShipContext.Provider
@@ -34,6 +67,7 @@ export const ShipProvider = ({ children }) => {
 				changeShipType,
 				shipsInfo,
 				updateShipsInfo,
+				rotateShip,
 			}}>
 			{children}
 		</ShipContext.Provider>

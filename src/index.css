@@ -41,7 +41,31 @@
 	position: relative;
 	z-index: 1;
 }
-
 .hidden {
 	display: none;
+}
+.ship1_vertical {
+	position: absolute;
+	z-index: 1;
+	transform: rotate(90deg) translate(30px, 20px);
+}
+.ship2_vertical {
+	position: absolute;
+	z-index: 1;
+	transform: rotate(90deg) translate(45px, 50px);
+}
+.ship3_vertical {
+	position: absolute;
+	z-index: 1;
+	transform: rotate(90deg) translate(45px, 50px);
+}
+.ship4_vertical {
+	position: absolute;
+	z-index: 1;
+	transform: rotate(90deg) translate(75px, 65px);
+}
+.ship5_vertical {
+	position: absolute;
+	z-index: 1;
+	transform: rotate(90deg) translate(100px, 95px);
 }

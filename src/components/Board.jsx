@@ -24,7 +24,6 @@ function Board({ enemyBoard }) {
 			if (shipsInfo[key][0] == x && shipsInfo[key][1] == y) {
 				isThereShip = true;
 				shiptype = key;
-				console.log('after: ' + key);
 			}
 		}
 

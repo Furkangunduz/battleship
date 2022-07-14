@@ -10,25 +10,31 @@ import ShipContext from '../ShipContext';
 import Ship from './Ship';
 
 function Square({ x, y, classname, shiptype, isShipHere }) {
-	const { shipType, shipsInfo, updateShipsInfo } = useContext(ShipContext);
+	const { shipType, shipsInfo, updateShipsInfo, shipsVerticalTranslateInfo } =
+		useContext(ShipContext);
 
 	const [{ isOver }, drop] = useDrop(
 		() => ({
 			accept: 'ship',
-			drop: () => updateShipsInfo(shiptype, x, y),
+			drop: () => updateShipsInfo(shipType, x, y),
 			collect: (monitor) => ({
 				isOver: !!monitor.isOver(),
 			}),
 		}),
-		[shipsInfo[shipType][0], shipsInfo[shipType][1]]
+		[shipsInfo[shipType][0], shipsInfo[shipType][1], shipsInfo[shipType][2]]
 	);
 
 	const renderShip = () => {
-		if (shiptype == 1) return <Ship1 />;
-		if (shiptype == 2) return <Ship2 />;
-		if (shiptype == 3) return <Ship3 />;
-		if (shiptype == 4) return <Ship4 />;
-		if (shiptype == 5) return <Ship5 />;
+		let isShipVertical = '';
+		if (shipsInfo[shiptype][2] == 'vertical') {
+			isShipVertical = true;
+		}
+
+		if (shiptype == 1) return <Ship1 className={isShipVertical && 'ship1_vertical'} />;
+		if (shiptype == 2) return <Ship2 className={isShipVertical && 'ship2_vertical'} />;
+		if (shiptype == 3) return <Ship3 className={isShipVertical && 'ship3_vertical'} />;
+		if (shiptype == 4) return <Ship4 className={isShipVertical && 'ship4_vertical'} />;
+		if (shiptype == 5) return <Ship5 className={isShipVertical && 'ship5_vertical'} />;
 		if (shiptype == 0) return <></>;
 	};
 

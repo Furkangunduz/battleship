@@ -3,7 +3,8 @@ import { useContext } from 'react';
 import ShipContext from '../ShipContext';
 
 function Ship({ children, shiptype }) {
-	const { changeShipType } = useContext(ShipContext);
+	const { changeShipType, shipsInfo } = useContext(ShipContext);
+	const direction = shipsInfo[shiptype][2];
 
 	const [{ isDragging }, drag] = useDrag(() => ({
 		type: 'ship',
@@ -15,7 +16,7 @@ function Ship({ children, shiptype }) {
 	return (
 		<div
 			onMouseDown={() => changeShipType(shiptype)}
-			className={`ship ${isDragging && 'hidden'}`}
+			className={`${direction != 'vertical' ? 'ship' : ''} ${isDragging ? 'hidden' : ''} `}
 			ref={drag}>
 			{children}
 		</div>
