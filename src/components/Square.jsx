@@ -10,13 +10,12 @@ import ShipContext from '../ShipContext';
 import Ship from './Ship';
 
 function Square({ x, y, classname, shiptype, isShipHere }) {
-	const { shipType, shipsInfo, updateShipsInfo, shipsVerticalTranslateInfo } =
-		useContext(ShipContext);
+	const { shipType, shipsInfo, updateShipsInfo } = useContext(ShipContext);
 
 	const [{ isOver }, drop] = useDrop(
 		() => ({
 			accept: 'ship',
-			drop: () => updateShipsInfo(shipType, x, y),
+			drop: () => updateShipsInfo(shiptype, x, y),
 			collect: (monitor) => ({
 				isOver: !!monitor.isOver(),
 			}),

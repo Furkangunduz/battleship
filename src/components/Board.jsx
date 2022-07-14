@@ -1,4 +1,3 @@
-import { ReactComponent as Ship1 } from '../assets/ship-1.svg';
 import { useContext } from 'react';
 import ShipContext from '../ShipContext';
 
