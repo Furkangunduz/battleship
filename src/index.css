@@ -32,6 +32,8 @@
 	place-content: center;
 	color: #fff;
 	font-size: 12px;
+	border-right: 1px solid #fff;
+	border-bottom: 1px solid #fff;
 }
 
 .shiplist {
