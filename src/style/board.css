@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@500&family=Red+Hat+Display&family=Roboto:wght@300;400;500;700;900&display=swap');
 * {
 	font-family: 'Roboto', sans-serif;
+	margin: 0;
 }
 
 #root {

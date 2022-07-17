@@ -1,0 +1,248 @@
+$waveSpeed: 20;
+$boatWidth: 25em;
+
+$waveFront: #0cabaa;
+$waveBack: #108291;
+$sky1: #a5e1dd;
+$sky2: #d3ede2;
+$hull: #473322;
+$mast: #674333;
+$sail: #f2edea;
+$flag: #ff90aa;
+
+body,
+html {
+	min-height: 100%;
+	height: 100%;
+}
+
+html {
+	background: $sky1;
+}
+
+body {
+	background: linear-gradient(to bottom, $sky1 0%, $sky2 100%);
+}
+
+.boat {
+	position: fixed;
+	bottom: 20%;
+	left: 50%;
+	margin-left: -$boatWidth * 0.5;
+	animation: boat ($waveSpeed * 0.125) + s linear alternate infinite;
+	animation-delay: -0.33s;
+}
+
+.hull {
+	position: relative;
+	height: 0em;
+	width: $boatWidth;
+	border-bottom: 5em solid $hull;
+	background: $hull;
+	border-radius: 0 0 $boatWidth * 2 $boatWidth * 2;
+}
+
+.hull::after {
+	content: 'SS FRISK';
+	display: block;
+	color: $sail;
+	padding-left: 1em;
+	padding-top: 1em;
+	font-size: 10px;
+	opacity: 0.5;
+	font-family: 'Open Sans', sans-serif;
+	letter-spacing: 1px;
+}
+
+.mast {
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	margin-left: -0.25em;
+	background: $mast;
+	width: 0.5em;
+	height: 15em;
+	z-index: -1;
+}
+
+.sail {
+	top: 2em;
+	margin-left: 0.5em;
+	width: 0;
+	height: 0;
+	border-bottom: 7em solid $sail;
+	border-right: 4em solid transparent;
+	position: absolute;
+}
+
+.sail::after {
+	margin-left: 0.75em;
+	width: 0;
+	height: 0;
+	border-bottom: 6em solid $sail;
+	border-left: 4em solid transparent;
+	content: '';
+	display: block;
+	position: absolute;
+	left: -5.25em;
+	top: 1.1em;
+}
+
+.flag {
+	position: absolute;
+	width: 3em;
+	height: 2em;
+	background: $flag;
+	top: 0;
+	right: 0.5em;
+}
+
+.skull {
+	height: 20px;
+	width: 20px;
+	background: #fff;
+	border-radius: 100%;
+	position: absolute;
+	left: 50%;
+	margin-left: -10px;
+	top: 13%;
+}
+
+.skull::before {
+	content: '';
+	display: block;
+	position: absolute;
+	bottom: 1px;
+	background: white;
+	width: 24px;
+	height: 10px;
+	left: 50%;
+	margin-left: -12px;
+	border-radius: 100%;
+}
+
+.eye {
+	position: absolute;
+	background: $flag;
+	height: 8px;
+	width: 4px;
+	border-radius: 100%;
+	top: 5px;
+	z-index: 100;
+}
+
+.eye:first-child {
+	right: 50%;
+	margin-right: 2px;
+}
+
+.eye:last-child {
+	left: 50%;
+	margin-left: 2px;
+}
+
+.teeth {
+	display: flex;
+	justify-content: center;
+	position: absolute;
+	bottom: -2px;
+	width: 100%;
+	right: -1px;
+}
+
+.tooth {
+	background: #fff;
+	height: 6px;
+	width: 3px;
+	margin: 0 1px 0 0;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+.waves {
+	height: 33.3%;
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+}
+
+.waves-back {
+	height: 36%;
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+}
+
+.wave-back {
+	position: absolute;
+	bottom: 0;
+	width: 85%;
+	height: 100%;
+	background: $waveBack;
+	border-radius: 100% 100% 0 0;
+	animation: wave $waveSpeed * 1.35 + s linear infinite;
+}
+
+.wave {
+	position: absolute;
+	bottom: 0;
+	width: 85%;
+	height: 100%;
+	background: $waveFront;
+	border-radius: 100% 100% 0 0;
+	animation: wave $waveSpeed + s linear infinite;
+}
+
+.wave:nth-child(1),
+.wave-back:nth-child(1) {
+	animation-delay: 0s;
+}
+
+.wave:nth-child(2),
+.wave-back:nth-child(2) {
+	animation-delay: -$waveSpeed * 0.25 + s;
+}
+
+.wave:nth-child(3),
+.wave-back:nth-child(3) {
+	animation-delay: -$waveSpeed * 0.5 + s;
+}
+
+.wave:nth-child(4),
+.wave-back:nth-child(4) {
+	animation-delay: -$waveSpeed * 0.75 + s;
+}
+.wave:nth-child(5),
+.wave-back:nth-child(5) {
+	animation-delay: -$waveSpeed + s;
+}
+
+@keyframes wave {
+	0% {
+		left: 155%;
+	}
+	100% {
+		left: -155%;
+	}
+}
+
+@keyframes boat {
+	0% {
+		bottom: 32%;
+	}
+	100% {
+		bottom: 23%;
+	}
+}
+
+.author {
+	position: absolute;
+	right: 1em;
+	bottom: 0.5em;
+	color: $sail;
+	font-family: 'Open Sans', sans-serif;
+}
+
+a {
+	color: $sail;
+}
