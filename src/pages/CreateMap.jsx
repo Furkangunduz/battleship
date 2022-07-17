@@ -1,8 +1,10 @@
 import Board from '../components/Board';
-import Ships from '../components/ShipList';
+import ShipList from '../components/ShipList';
 import { toast } from 'react-toastify';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+
+import Button from 'react-bootstrap/Button';
 
 import { useContext } from 'react';
 import ShipContext from '../ShipContext';
@@ -54,18 +56,19 @@ function CreateMap() {
 
 	return (
 		<DndProvider backend={HTML5Backend}>
-			<Board key={'myboard'} enemyBoard={false} />
-			<Ships />
+			<div className='board-container'>
+				<Board key={'myboard'} enemyBoard={false} />
+				<ShipList />
+			</div>
 			<div style={{ marginTop: '10px', display: 'flex' }}>
-				<button
+				<Button
 					onClick={() => {
 						rotateShip(shipType);
 					}}>
-					{' '}
-					Rotate{' '}
-				</button>
+					Rotate
+				</Button>
 				<p style={{ marginLeft: '50px', fontSize: '30px' }}>{shipType}</p>
-				<button onClick={onReady}>Ready</button>
+				<Button onClick={onReady}>Ready</Button>
 			</div>
 		</DndProvider>
 	);

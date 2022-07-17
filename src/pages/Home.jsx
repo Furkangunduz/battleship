@@ -1,11 +1,16 @@
 import ship from '../assets/HomepageShip.png';
 import { useState } from 'react';
-import navigate
-import { Button, TextField } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
-	const [Join, setJoin] = useState(true); // 0 create ,1 join
+	const [roomCode, setroomCode] = useState(''); // 0 create ,1 join
+	const navigate = useNavigate();
 
+	const navigateWaitingPage = () => {
+		setTimeout(() => {
+			navigate('/waiting');
+		}, 500);
+	};
 	return (
 		<div className='home-container'>
 			<div className='home-header'>
@@ -18,27 +23,22 @@ function Home() {
 				<img src={ship} width={'300px'} alt='BattleShip' />
 			</div>
 			<div className='buttons'>
-				<Button variant='contained' color='secondary' onClick={navigae}>
+				<button variant='contained' color='secondary' onClick={navigateWaitingPage}>
 					Create Room
-				</Button>
-				<Button variant='contained' onClick={() => setJoin((prev) => !prev)}>
-					Join Room
-				</Button>
+				</button>
 			</div>
 			<div className='room-input'>
-				{Join && (
-					<>
-						<TextField
-							id='standard-basic'
-							label='Room Code'
-							variant='filled'
-							color='info'
-						/>
-						<Button variant='contained' color='warning'>
-							Fight !
-						</Button>
-					</>
-				)}
+				<input
+					id='standard-basic'
+					label='Room Code'
+					variant='filled'
+					color='info'
+					value={roomCode}
+					onChange={(e) => setroomCode(e.target.value)}
+				/>
+				<button variant='contained' disabled={!roomCode}>
+					Join Room
+				</button>
 			</div>
 		</div>
 	);
