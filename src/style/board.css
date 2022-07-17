@@ -4,9 +4,14 @@
 	margin: 0;
 }
 
-#root {
-	height: 100vh;
-	gap: 100px;
+.board-container {
+	margin-top: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.dropdown-menu {
+	background-color: black;
 }
 
 .board {

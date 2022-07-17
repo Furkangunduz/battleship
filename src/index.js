@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom"
 
 import './style/board.css';
 import './style/home.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { ShipProvider } from "./ShipContext"
