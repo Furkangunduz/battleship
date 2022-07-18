@@ -6,7 +6,7 @@ function Home({ navigate }) {
 
 	const navigateWaitingPage = () => {
 		setTimeout(() => {
-			navigate('/waiting');
+			navigate('/create-map');
 		}, 500);
 	};
 	return (

@@ -8,6 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { ShipProvider } from "./ShipContext"
+import { SocketProvider } from "./SocketContext"
+
 import { ToastContainer } from 'react-toastify';
 import App from './App';
 
@@ -16,7 +18,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <ShipProvider>
     <BrowserRouter>
-      <React.StrictMode>
+      <SocketProvider>
         <App />
         <ToastContainer
           position="bottom-center"
@@ -29,7 +31,7 @@ root.render(
           draggable
           pauseOnHover
         />
-      </React.StrictMode>
+      </SocketProvider>
     </BrowserRouter>
   </ShipProvider>
 );

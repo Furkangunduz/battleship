@@ -8,13 +8,14 @@ import { useNavigate } from 'react-router-dom';
 function App() {
   const navigate = useNavigate();
 
-  return (<>
-    <Routes>
-      <Route path="/" element={<Home navigate={navigate} />} />
-      <Route path="/waiting" element={<WaitingPage navigate={navigate} />} />
-      <Route path="/create-map" element={<CreateMap navigate={navigate} />} />
-    </Routes>
-  </>)
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<Home navigate={navigate} />} />
+        <Route path="/waiting" element={<WaitingPage navigate={navigate} />} />
+        <Route path="/create-map" element={<CreateMap navigate={navigate} />} />
+      </Routes>
+    </>)
 }
 
 export default App;
