@@ -1,18 +1,22 @@
 import Board from '../components/Board';
 import ShipList from '../components/ShipList';
+import History from '../components/History';
 import { toast } from 'react-toastify';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import Button from 'react-bootstrap/Button';
 
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import ShipContext from '../ShipContext';
 
 import { battleShipMapValidator } from '../battleShip';
+import Rules from '../components/Rules';
 
-function CreateMap() {
+function CreateMap({ navigate }) {
+	const ShipNameList = ['', 'Patrol Boat', 'Submarine', 'Destroyer', 'Battleship', 'Carrier'];
 	const { rotateShip, shipType, shipsInfo } = useContext(ShipContext);
+	const [closeInfo, setCloseInfo] = useState(false);
 	var gameBoard;
 
 	const onReady = () => {
@@ -21,7 +25,7 @@ function CreateMap() {
 		for (let key in shipsInfo) {
 			if (key != '0') {
 				if (shipsInfo[key][0] == -1 && shipsInfo[key][1] == -1) {
-					console.log('You should place all ships you have');
+					toast.error('You should place all ships.');
 					return;
 				}
 			}
@@ -48,29 +52,49 @@ function CreateMap() {
 		}
 		console.log('ship placement is okey');
 		if (!battleShipMapValidator(gameBoard)) {
-			toast.error('Please create valid map.');
-		} else {
-			toast.success('Waiting for opponent.');
+			toast.error(
+				'The ship cannot overlap or be in contact with any other ship, neither by edge nor by corner.'
+			);
+			return;
 		}
+		toast.success('Waiting for opponent.');
 	};
 
 	return (
-		<DndProvider backend={HTML5Backend}>
-			<div className='board-container'>
-				<Board key={'myboard'} enemyBoard={false} />
-				<ShipList />
-			</div>
-			<div style={{ marginTop: '10px', display: 'flex' }}>
-				<Button
-					onClick={() => {
-						rotateShip(shipType);
-					}}>
-					Rotate
-				</Button>
-				<p style={{ marginLeft: '50px', fontSize: '30px' }}>{shipType}</p>
-				<Button onClick={onReady}>Ready</Button>
-			</div>
-		</DndProvider>
+		<>
+			<DndProvider backend={HTML5Backend}>
+				<h1 style={{ textAlign: 'center', marginBottom: '10px' }}>PLACE YOUR SHIPS</h1>
+				<div className='game-container'>
+					<div className='game-history'>
+						<History />
+					</div>
+					<div className='board-container'>
+						<div className='board-and-ships'>
+							<Board />
+							<div className='dropdown-and-action-buttons'>
+								<ShipList />
+								<div className='actions'>
+									<p>Current placed Ship was :</p>
+									<p style={{ color: 'red' }}>
+										{ShipNameList[shipType]}
+									</p>
+									<Button
+										onClick={() => {
+											rotateShip(shipType);
+										}}>
+										Rotate the {ShipNameList[shipType]}
+									</Button>
+									<Button variant='warning' onClick={onReady}>
+										Ready
+									</Button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</DndProvider>
+			{!closeInfo && <Rules setCloseInfo={setCloseInfo} />}
+		</>
 	);
 }
 

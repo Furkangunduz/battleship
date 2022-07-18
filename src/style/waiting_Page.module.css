@@ -1,51 +1,36 @@
-$waveSpeed: 20;
-$boatWidth: 25em;
-
-$waveFront: #0cabaa;
-$waveBack: #108291;
-$sky1: #a5e1dd;
-$sky2: #d3ede2;
-$hull: #473322;
-$mast: #674333;
-$sail: #f2edea;
-$flag: #ff90aa;
-
-body,
-html {
-	min-height: 100%;
-	height: 100%;
-}
-
-html {
-	background: $sky1;
-}
-
-body {
-	background: linear-gradient(to bottom, $sky1 0%, $sky2 100%);
+.waiting_contianer {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100;
+	background: linear-gradient(to bottom, #a5e1dd 0%, #d3ede2 100%);
 }
 
 .boat {
 	position: fixed;
 	bottom: 20%;
 	left: 50%;
-	margin-left: -$boatWidth * 0.5;
-	animation: boat ($waveSpeed * 0.125) + s linear alternate infinite;
+	margin-left: -12.5em;
+	-webkit-animation: boat 2.5s linear alternate infinite;
+	animation: boat 2.5s linear alternate infinite;
+	-webkit-animation-delay: -0.33s;
 	animation-delay: -0.33s;
 }
 
 .hull {
 	position: relative;
 	height: 0em;
-	width: $boatWidth;
-	border-bottom: 5em solid $hull;
-	background: $hull;
-	border-radius: 0 0 $boatWidth * 2 $boatWidth * 2;
+	width: 25em;
+	border-bottom: 5em solid #473322;
+	background: #473322;
+	border-radius: 0 0 50em 50em;
 }
 
 .hull::after {
 	content: 'SS FRISK';
 	display: block;
-	color: $sail;
+	color: #f2edea;
 	padding-left: 1em;
 	padding-top: 1em;
 	font-size: 10px;
@@ -59,7 +44,7 @@ body {
 	bottom: 0;
 	left: 50%;
 	margin-left: -0.25em;
-	background: $mast;
+	background: #674333;
 	width: 0.5em;
 	height: 15em;
 	z-index: -1;
@@ -70,7 +55,7 @@ body {
 	margin-left: 0.5em;
 	width: 0;
 	height: 0;
-	border-bottom: 7em solid $sail;
+	border-bottom: 7em solid #f2edea;
 	border-right: 4em solid transparent;
 	position: absolute;
 }
@@ -79,7 +64,7 @@ body {
 	margin-left: 0.75em;
 	width: 0;
 	height: 0;
-	border-bottom: 6em solid $sail;
+	border-bottom: 6em solid #f2edea;
 	border-left: 4em solid transparent;
 	content: '';
 	display: block;
@@ -92,7 +77,7 @@ body {
 	position: absolute;
 	width: 3em;
 	height: 2em;
-	background: $flag;
+	background: #ff90aa;
 	top: 0;
 	right: 0.5em;
 }
@@ -123,7 +108,7 @@ body {
 
 .eye {
 	position: absolute;
-	background: $flag;
+	background: #ff90aa;
 	height: 8px;
 	width: 4px;
 	border-radius: 100%;
@@ -166,21 +151,22 @@ body {
 	bottom: 0;
 }
 
-.waves-back {
+.waves_back {
 	height: 36%;
 	width: 100%;
 	position: fixed;
 	bottom: 0;
 }
 
-.wave-back {
+.wave_back {
 	position: absolute;
 	bottom: 0;
 	width: 85%;
 	height: 100%;
-	background: $waveBack;
+	background: #108291;
 	border-radius: 100% 100% 0 0;
-	animation: wave $waveSpeed * 1.35 + s linear infinite;
+	-webkit-animation: wave 27s linear infinite;
+	animation: wave 27s linear infinite;
 }
 
 .wave {
@@ -188,33 +174,49 @@ body {
 	bottom: 0;
 	width: 85%;
 	height: 100%;
-	background: $waveFront;
+	background: #0cabaa;
 	border-radius: 100% 100% 0 0;
-	animation: wave $waveSpeed + s linear infinite;
+	-webkit-animation: wave 20s linear infinite;
+	animation: wave 20s linear infinite;
 }
 
 .wave:nth-child(1),
 .wave-back:nth-child(1) {
+	-webkit-animation-delay: 0s;
 	animation-delay: 0s;
 }
 
 .wave:nth-child(2),
 .wave-back:nth-child(2) {
-	animation-delay: -$waveSpeed * 0.25 + s;
+	-webkit-animation-delay: -5s;
+	animation-delay: -5s;
 }
 
 .wave:nth-child(3),
 .wave-back:nth-child(3) {
-	animation-delay: -$waveSpeed * 0.5 + s;
+	-webkit-animation-delay: -10s;
+	animation-delay: -10s;
 }
 
 .wave:nth-child(4),
 .wave-back:nth-child(4) {
-	animation-delay: -$waveSpeed * 0.75 + s;
+	-webkit-animation-delay: -15s;
+	animation-delay: -15s;
 }
+
 .wave:nth-child(5),
 .wave-back:nth-child(5) {
-	animation-delay: -$waveSpeed + s;
+	-webkit-animation-delay: -20s;
+	animation-delay: -20s;
+}
+
+@-webkit-keyframes wave {
+	0% {
+		left: 155%;
+	}
+	100% {
+		left: -155%;
+	}
 }
 
 @keyframes wave {
@@ -225,7 +227,14 @@ body {
 		left: -155%;
 	}
 }
-
+@-webkit-keyframes boat {
+	0% {
+		bottom: 32%;
+	}
+	100% {
+		bottom: 23%;
+	}
+}
 @keyframes boat {
 	0% {
 		bottom: 32%;
@@ -234,15 +243,14 @@ body {
 		bottom: 23%;
 	}
 }
-
 .author {
 	position: absolute;
 	right: 1em;
 	bottom: 0.5em;
-	color: $sail;
+	color: #f2edea;
 	font-family: 'Open Sans', sans-serif;
 }
 
 a {
-	color: $sail;
+	color: #f2edea;
 }

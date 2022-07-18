@@ -4,14 +4,67 @@
 	margin: 0;
 }
 
-.board-container {
+.game-container {
 	margin-top: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.game-history {
+	width: 300px;
+	font-size: 0.9em;
+	margin-left: 2%;
+}
+
+.board-container {
+	margin-right: 20%;
+}
+.board-and-ships {
+	display: flex;
+}
+.dropdown-and-action-buttons {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+.actions {
+	display: flex;
+	flex-direction: column;
+	padding-left: 10px;
+	gap: 20px;
+}
+
+.dropdown-menu {
+	background-color: black;
+}
+
+.how-to-play {
+	position: fixed;
+	height: 100vh;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	background-color: rgba(0, 0, 0, 0.5);
 }
-.dropdown-menu {
-	background-color: black;
+
+.how-to-play .info {
+	position: relative;
+	background-color: rgba(255, 255, 255, 0.95);
+	width: 50%;
+	padding: 20px 40px 30px;
+}
+
+.info-close-btn {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin-right: 10px;
+	margin-top: 5px;
+	cursor: pointer;
 }
 
 .board {
