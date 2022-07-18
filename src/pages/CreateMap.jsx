@@ -5,31 +5,51 @@ import { toast } from 'react-toastify';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
+import { useContext, useState, useEffect } from 'react';
+import ShipContext from '../ShipContext';
+import SocketContext from '../SocketContext';
+import Rules from '../components/Rules';
 import Button from 'react-bootstrap/Button';
 
-import { useContext, useState } from 'react';
-import ShipContext from '../ShipContext';
-
-import { battleShipMapValidator } from '../battleShip';
-import Rules from '../components/Rules';
+const ShipNameList = ['', 'Patrol Boat', 'Submarine', 'Destroyer', 'Battleship', 'Carrier'];
 
 function CreateMap({ navigate }) {
-	const ShipNameList = ['', 'Patrol Boat', 'Submarine', 'Destroyer', 'Battleship', 'Carrier'];
 	const { rotateShip, shipType, shipsInfo } = useContext(ShipContext);
-	const [closeInfo, setCloseInfo] = useState(false);
-	var gameBoard;
+	const { socket } = useContext(SocketContext);
 
-	const onReady = () => {
-		gameBoard = [...Array(10)].map((e) => Array(10).fill('0'));
-		console.log('Preaparing for the battle');
+	const [closeInfo, setCloseInfo] = useState(false);
+	const [isMyBoardValid, setIsMyBoardValid] = useState(false);
+
+	useEffect(() => {
+		socket.on('Board_validation', ({ result }) => {
+			console.log('Boar is valid ? : ', result);
+			if (result) {
+				toast.success('Great! Waiting for your opponent.');
+				setTimeout(() => {
+					navigate('/waiting');
+				}, 6000);
+			} else
+				toast.error(
+					'The ship cannot overlap or be in contact with any other ship, neither by edge nor by corner.'
+				);
+
+			setIsMyBoardValid(result);
+		});
+	}, [socket]);
+
+	const checkAllShipsPlacedToScreen = (shipsInfo) => {
 		for (let key in shipsInfo) {
 			if (key != '0') {
 				if (shipsInfo[key][0] == -1 && shipsInfo[key][1] == -1) {
-					toast.error('You should place all ships.');
-					return;
+					return false;
 				}
 			}
 		}
+		return true;
+	};
+
+	const createGameBoard = (shipsInfo) => {
+		var gameBoard = [...Array(10)].map((e) => Array(10).fill('0'));
 		for (let key in shipsInfo) {
 			let x = shipsInfo[key][0] - 1;
 			let y = shipsInfo[key][1] - 1;
@@ -50,14 +70,19 @@ function CreateMap({ navigate }) {
 				}
 			}
 		}
-		console.log('ship placement is okey');
-		if (!battleShipMapValidator(gameBoard)) {
-			toast.error(
-				'The ship cannot overlap or be in contact with any other ship, neither by edge nor by corner.'
-			);
+		console.log('GameBoard is ready.');
+		return gameBoard;
+	};
+
+	const onReady = () => {
+		console.log('Preaparing for the battle');
+
+		if (!checkAllShipsPlacedToScreen(shipsInfo)) {
+			toast.error('You should place all ships.');
 			return;
 		}
-		toast.success('Waiting for opponent.');
+		const gameBoard = createGameBoard(shipsInfo);
+		socket.emit('Board_validation', JSON.stringify(gameBoard));
 	};
 
 	return (
@@ -81,10 +106,14 @@ function CreateMap({ navigate }) {
 									<Button
 										onClick={() => {
 											rotateShip(shipType);
-										}}>
+										}}
+										disabled={isMyBoardValid}>
 										Rotate the {ShipNameList[shipType]}
 									</Button>
-									<Button variant='warning' onClick={onReady}>
+									<Button
+										variant='warning'
+										onClick={onReady}
+										disabled={isMyBoardValid}>
 										Ready
 									</Button>
 								</div>
