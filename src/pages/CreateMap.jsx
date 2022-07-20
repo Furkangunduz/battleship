@@ -2,8 +2,7 @@ import Board from '../components/Board';
 import ShipList from '../components/ShipList';
 import History from '../components/History';
 import { toast } from 'react-toastify';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+
 import { useContext, useState, useEffect } from 'react';
 import ShipContext from '../ShipContext';
 import SocketContext from '../SocketContext';
@@ -33,7 +32,7 @@ function CreateMap({ navigate }) {
 					setTimeout(() => {
 						setShowPopup(false);
 						setPopupMessage('');
-					}, 6000);
+					}, 100);
 				}
 
 				socket.emit('save_map', {
@@ -42,7 +41,8 @@ function CreateMap({ navigate }) {
 				});
 
 				setTimeout(() => {
-					navigate(`/waiting/${socket.id}/${params.roomName}`);
+					sessionStorage.setItem('shipsInfo', JSON.stringify(shipsInfo));
+					navigate(`/waiting/${params.userName}/${params.roomName}`);
 				}, 6000);
 			} else {
 				setShowPopup(true);
@@ -118,41 +118,37 @@ function CreateMap({ navigate }) {
 
 	return (
 		<>
-			<DndProvider backend={HTML5Backend}>
-				<h1 style={{ textAlign: 'center', marginBottom: '10px' }}>PLACE YOUR SHIPS</h1>
-				<div className='game-container'>
-					<div className='game-history'>
-						<History />
-					</div>
-					<div className='board-container'>
-						<div className='board-and-ships'>
-							<Board />
-							<div className='dropdown-and-action-buttons'>
-								<ShipList />
-								<div className='actions'>
-									<p>Current placed Ship was :</p>
-									<p style={{ color: 'red' }}>
-										{ShipNameList[shipType]}
-									</p>
-									<Button
-										onClick={() => {
-											rotateShip(shipType);
-										}}
-										disabled={isMyBoardValid}>
-										Rotate the {ShipNameList[shipType]}
-									</Button>
-									<Button
-										variant='warning'
-										onClick={onReady}
-										disabled={isMyBoardValid}>
-										Ready
-									</Button>
-								</div>
+			<h1 style={{ textAlign: 'center', marginBottom: '10px' }}>PLACE YOUR SHIPS</h1>
+			<div className='game-container'>
+				<div className='game-history'>
+					<History />
+				</div>
+				<div className='board-container'>
+					<div className='board-and-ships'>
+						<Board />
+						<div className='dropdown-and-action-buttons'>
+							<ShipList />
+							<div className='actions'>
+								<p>Current placed Ship was :</p>
+								<p style={{ color: 'red' }}>{ShipNameList[shipType]}</p>
+								<Button
+									onClick={() => {
+										rotateShip(shipType);
+									}}
+									disabled={isMyBoardValid}>
+									Rotate the {ShipNameList[shipType]}
+								</Button>
+								<Button
+									variant='warning'
+									onClick={onReady}
+									disabled={isMyBoardValid}>
+									Ready
+								</Button>
 							</div>
 						</div>
 					</div>
 				</div>
-			</DndProvider>
+			</div>
 			{!closeInfo && <Rules setCloseInfo={setCloseInfo} />}
 		</>
 	);

@@ -11,7 +11,15 @@ export const ShipProvider = ({ children }) => {
 		'4': [-1, -1, 'horizontal', 4],
 		'5': [-1, -1, 'horizontal', 5],
 	});
+
+	if (sessionStorage.getItem('shipsInfo')) {
+		setTimeout(() => {
+			setShipsInfo(JSON.parse(sessionStorage.getItem('shipsInfo')));
+		}, 100);
+	}
+
 	const [shipType, setShipType] = useState('0');
+	const [isBattleStart, setIsBattleStart] = useState(false);
 
 	const updateShipsInfo = (type, toX, toY) => {
 		let direction = shipsInfo[`${type}`][2];
@@ -68,6 +76,8 @@ export const ShipProvider = ({ children }) => {
 				shipsInfo,
 				updateShipsInfo,
 				rotateShip,
+				isBattleStart,
+				setIsBattleStart,
 			}}>
 			{children}
 		</ShipContext.Provider>
