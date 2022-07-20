@@ -1,3 +1,9 @@
+:root {
+	--bg-color: #a5e1dd;
+	--typewriterSpeed: 7s;
+	--typewriterCharacters: 26;
+}
+
 .waiting_contianer {
 	position: absolute;
 	top: 0;
@@ -243,14 +249,58 @@
 		bottom: 23%;
 	}
 }
-.author {
-	position: absolute;
-	right: 1em;
-	bottom: 0.5em;
-	color: #f2edea;
-	font-family: 'Open Sans', sans-serif;
+.animatedH1 {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	margin-top: 35px;
+}
+.animatedH1 h1 {
+	text-align: center;
+	font-size: clamp(1rem, 3vw + 1rem, 4rem);
+	position: relative;
+	font-family: monospace;
+	width: max-content;
 }
 
-a {
-	color: #f2edea;
+.animatedH1 h1::before,
+.animatedH1 h1::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+.animatedH1 h1::before {
+	background-color: var(--bg-color);
+	animation: typingAnimation var(--typewriterSpeed) steps(var(--typewriterCharacters)) infinite;
+}
+
+.animatedH1 h1::after {
+	width: 0.125em;
+	opacity: 1;
+	background-color: #000;
+	animation: typingAnimation var(--typewriterSpeed) steps(var(--typewriterCharacters)) infinite,
+		blink 750ms infinite;
+}
+
+@keyframes typingAnimation {
+	to {
+		left: 100%;
+	}
+}
+
+@keyframes blink {
+	to {
+		background: transparent;
+	}
+}
+
+@keyframes fade {
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }

@@ -4,38 +4,62 @@ import History from '../components/History';
 import { toast } from 'react-toastify';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-
 import { useContext, useState, useEffect } from 'react';
 import ShipContext from '../ShipContext';
 import SocketContext from '../SocketContext';
 import Rules from '../components/Rules';
 import Button from 'react-bootstrap/Button';
+import { useParams } from 'react-router-dom';
 
 const ShipNameList = ['', 'Patrol Boat', 'Submarine', 'Destroyer', 'Battleship', 'Carrier'];
 
 function CreateMap({ navigate }) {
 	const { rotateShip, shipType, shipsInfo } = useContext(ShipContext);
 	const { socket } = useContext(SocketContext);
-
+	const [gameBoard, setGameBoard] = useState('');
+	const [showPopup, setShowPopup] = useState(false);
+	const [popupMessage, setPopupMessage] = useState('');
 	const [closeInfo, setCloseInfo] = useState(false);
 	const [isMyBoardValid, setIsMyBoardValid] = useState(false);
+	const params = useParams();
 
 	useEffect(() => {
-		socket.on('Board_validation', ({ result }) => {
+		socket.on('board_validation', ({ result }) => {
 			console.log('Boar is valid ? : ', result);
 			if (result) {
-				toast.success('Great! Waiting for your opponent.');
+				if (!showPopup) {
+					setShowPopup(true);
+					setPopupMessage('Great! Waiting for your opponent.');
+					setTimeout(() => {
+						setShowPopup(false);
+						setPopupMessage('');
+					}, 6000);
+				}
+
+				socket.emit('save_map', {
+					'gameBoard': gameBoard,
+					'roomName': params.roomName,
+				});
+
 				setTimeout(() => {
-					navigate('/waiting');
+					navigate(`/waiting/${socket.id}/${params.roomName}`);
 				}, 6000);
-			} else
-				toast.error(
+			} else {
+				setShowPopup(true);
+
+				setPopupMessage(
 					'The ship cannot overlap or be in contact with any other ship, neither by edge nor by corner.'
 				);
 
+				setTimeout(() => {
+					setShowPopup(false);
+					setPopupMessage('');
+				}, 6000);
+			}
+
 			setIsMyBoardValid(result);
 		});
-	}, [socket]);
+	}, [socket, gameBoard]);
 
 	const checkAllShipsPlacedToScreen = (shipsInfo) => {
 		for (let key in shipsInfo) {
@@ -81,9 +105,16 @@ function CreateMap({ navigate }) {
 			toast.error('You should place all ships.');
 			return;
 		}
-		const gameBoard = createGameBoard(shipsInfo);
-		socket.emit('Board_validation', JSON.stringify(gameBoard));
+		let board = createGameBoard(shipsInfo);
+		setGameBoard(board);
+		setTimeout(() => {
+			socket.emit('board_validation', board);
+		}, 1000);
 	};
+
+	if (showPopup) {
+		toast(popupMessage);
+	}
 
 	return (
 		<>

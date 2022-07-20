@@ -57,8 +57,10 @@
 }
 
 .room-input {
-	width: 100%;
 	display: flex;
+	flex-direction: column;
+	width: 30%;
+	margin: 0 auto;
 	justify-content: center;
 	align-items: center;
 	gap: 25px;
