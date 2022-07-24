@@ -25,6 +25,13 @@ function WaitingPage({ navigate }) {
 				setEnemyName(name1);
 			}
 		});
+		socket.on('opponent-left', () => {
+			console.log('left');
+			toast('Opponent is left...');
+			setTimeout(() => {
+				navigate(`/`);
+			}, 5000);
+		});
 	}, [socket]);
 
 	socket.emit('waiting_for_opponent', {

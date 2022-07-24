@@ -59,6 +59,13 @@ function CreateMap({ navigate }) {
 
 			setIsMyBoardValid(result);
 		});
+		socket.on('opponent-left', () => {
+			console.log('left');
+			toast('Opponent is left...');
+			setTimeout(() => {
+				navigate(`/`);
+			}, 5000);
+		});
 	}, [socket, gameBoard]);
 
 	const checkAllShipsPlacedToScreen = (shipsInfo) => {

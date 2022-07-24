@@ -5,29 +5,20 @@ import SocketContext from '../SocketContext';
 import UserContext from '../UserContext';
 import { toast } from 'react-toastify';
 
-function Battle() {
+function Battle({ navigate }) {
 	const { setIsBattleStart } = useContext(ShipContext);
 	const { socket } = useContext(SocketContext);
 	const { userData, enemyName } = useContext(UserContext);
 	const [myBoard, setmyBoard] = useState(null);
 	const [enemyBoard, setenemyBoard] = useState(null);
 
+	useEffect(() => {}, []);
 	useEffect(() => {
 		setIsBattleStart(true);
-
 		socket.on('not_your_turn', () => {
 			toast('Not your turn.');
 		});
-
 		socket.on('new_map', (new_map) => {
-			console.log(
-				'state map before set : \n' + 'my map ',
-				myBoard,
-				'\n',
-				'enemy map',
-				enemyBoard
-			);
-			console.log('map from server : ', new_map);
 			new_map.forEach((player) => {
 				if (player[0] == enemyName) {
 					setenemyBoard(player[1]);
@@ -35,6 +26,13 @@ function Battle() {
 					setmyBoard(player[1]);
 				}
 			});
+		});
+		socket.on('opponent-left', () => {
+			console.log('left');
+			toast('Opponent is left...');
+			setTimeout(() => {
+				navigate(`/`);
+			}, 5000);
 		});
 	}, [socket]);
 	return (
