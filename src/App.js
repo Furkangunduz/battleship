@@ -17,7 +17,7 @@ function App() {
         <Route path="/" element={<Home navigate={navigate} />} />
         <Route path="/waiting/:userName/:roomName" element={<WaitingPage navigate={navigate} />} />
         <Route path="/create-map/:userName/:roomName" element={<CreateMap navigate={navigate} />} />
-        <Route path="/battle" element={<Battle />} />
+        <Route path="/battle" element={<Battle navigate={navigate} />} />
       </Routes>
     </DndProvider>)
 }
