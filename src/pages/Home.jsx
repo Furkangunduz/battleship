@@ -3,7 +3,9 @@ import { toast } from 'react-toastify';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+
 import SocketContext from '../SocketContext';
+import UserContext from '../UserContext';
 import { useState, useContext, useEffect } from 'react';
 
 function Home({ navigate }) {
@@ -12,6 +14,7 @@ function Home({ navigate }) {
 	const [roomfull, setRoomfull] = useState(true);
 
 	const { socket } = useContext(SocketContext);
+	const { userData, setUserData } = useContext(UserContext);
 
 	useEffect(() => {
 		socket.on('room_already_exist', () => {
@@ -34,15 +37,15 @@ function Home({ navigate }) {
 	}, [socket]);
 
 	const createRoom = () => {
-		socket.emit('create_room', state);
+		socket.emit('create_room', userData);
 	};
 	const joinRoom = () => {
-		socket.emit('join_room', state);
+		socket.emit('join_room', userData);
 	};
 
 	if (!roomExist || !roomfull) {
 		setTimeout(() => {
-			navigate(`/create-map/${state.roomName}/${state.userName}`);
+			navigate(`/create-map/${userData.userName}/${userData.roomName}`);
 		}, 2000);
 	}
 
@@ -61,29 +64,32 @@ function Home({ navigate }) {
 				<div className='room-input'>
 					<Form.Control
 						placeholder='Username'
-						value={state.userName}
+						value={userData.userName}
 						onChange={(e) =>
-							setState((prev) => ({ ...prev, userName: e.target.value }))
+							setUserData((prev) => ({ ...prev, userName: e.target.value }))
 						}
 					/>
 					<InputGroup>
 						<Form.Control
 							placeholder='Room name'
-							value={state.roomName}
+							value={userData.roomName}
 							onChange={(e) =>
-								setState((prev) => ({ ...prev, roomName: e.target.value }))
+								setUserData((prev) => ({
+									...prev,
+									roomName: e.target.value,
+								}))
 							}
 						/>
 						<Button
 							variant='success'
 							onClick={createRoom}
-							disabled={!state.roomName || !state.userName}>
+							disabled={!userData.roomName || !userData.userName}>
 							Create
 						</Button>
 						<Button
 							variant='warning'
 							onClick={joinRoom}
-							disabled={!state.roomName || !state.userName}>
+							disabled={!userData.roomName || !userData.userName}>
 							Join
 						</Button>
 					</InputGroup>

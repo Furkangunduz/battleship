@@ -2,10 +2,14 @@
 
 import style from '../style/waiting_Page.module.css';
 import SocketContext from '../SocketContext';
+import UserContext from '../UserContext';
 import { useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+
 function WaitingPage({ navigate }) {
 	const { socket } = useContext(SocketContext);
+	const { userData, setEnemyName } = useContext(UserContext);
+
 	const params = useParams();
 
 	useEffect(() => {
@@ -13,13 +17,19 @@ function WaitingPage({ navigate }) {
 			console.log('Starting battle');
 			navigate('/battle');
 		});
+		socket.on('players', ([name1, name2]) => {
+			console.log(name1, name2);
+			if (userData.userName == name1) {
+				setEnemyName(name2);
+			} else {
+				setEnemyName(name1);
+			}
+		});
 	}, [socket]);
 
-	console.log(params.roomName, params.socketId);
-
 	socket.emit('waiting_for_opponent', {
+		'userName': params.userName,
 		'roomName': params.roomName,
-		'socketId': params.socketId,
 	});
 
 	return (

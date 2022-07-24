@@ -3,14 +3,20 @@ import { ReactComponent as Ship2 } from '../assets/ship-2.svg';
 import { ReactComponent as Ship3 } from '../assets/ship-3.svg';
 import { ReactComponent as Ship4 } from '../assets/ship-4.svg';
 import { ReactComponent as Ship5 } from '../assets/ship-5.svg';
+import { ReactComponent as Fire } from '../assets/hit.svg';
+import { ReactComponent as Miss } from '../assets/miss.svg';
+
 import { useContext, useRef } from 'react';
 import { useDrop } from 'react-dnd';
 
 import ShipContext from '../ShipContext';
+import SocketContext from '../SocketContext';
 import Ship from './Ship';
-
-function Square({ x, y, classname, shiptype, isShipHere }) {
+import UserContext from '../UserContext';
+function Square({ x, y, classname, shiptype, isShipHere, isEnemySquare, hitOrMiss }) {
 	const { shipType, shipsInfo, updateShipsInfo, isBattleStart } = useContext(ShipContext);
+	const { socket } = useContext(SocketContext);
+	const { userData } = useContext(UserContext);
 
 	const emptyRef = useRef(null);
 
@@ -39,9 +45,34 @@ function Square({ x, y, classname, shiptype, isShipHere }) {
 		if (shiptype == 0) return <></>;
 	};
 
-	return (
+	const fire = (x, y) => {
+		socket.emit('fire', { 'player': userData, 'pos': { x, y } });
+		console.log('fire');
+	};
+
+	return !isEnemySquare ? (
 		<div ref={isBattleStart ? emptyRef : drop} className={classname}>
-			{isShipHere && <Ship shiptype={shiptype}>{renderShip()}</Ship>}
+			{isShipHere && (
+				<>
+					<Ship shiptype={shiptype}>{renderShip()}</Ship>
+				</>
+			)}
+			{hitOrMiss && (
+				<div
+					style={{
+						zIndex: '2',
+						position: 'absolute',
+						background: "url('../assets/hit.svg') no-repeat",
+					}}>
+					{hitOrMiss === 'hit' ? <Fire /> : hitOrMiss == 'miss' ? <Miss /> : <></>}
+				</div>
+			)}
+		</div>
+	) : (
+		<div
+			onClick={() => !hitOrMiss && fire(x, y)}
+			className={`enemy-square ${hitOrMiss ? 'disable' : 'enable'}`}>
+			{hitOrMiss === 'hit' ? <Fire /> : hitOrMiss == 'miss' ? <Miss /> : <></>}
 		</div>
 	);
 }

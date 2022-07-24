@@ -2,27 +2,30 @@ import { useContext } from 'react';
 import ShipContext from '../ShipContext';
 
 import Square from './Square';
-import Ship from './Ship';
 import Guide from './Guide';
 
 const BOARDSIZE = 11 * 11;
 const TopGuide = [' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 const SideGuide = [' ', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
-function Board({ enemyBoard }) {
+function Board({ isEnemyBoard, board }) {
 	const { shipPosition, shipsInfo, shipType } = useContext(ShipContext);
 
 	const renderSquare = (i) => {
 		const x = i % 11;
 		const y = Math.floor(i / 11);
-		const key = enemyBoard ? `e-${i}` : i;
+		const key = isEnemyBoard ? `enemy-${i}` : i;
 
 		let isThereShip = false;
 		let shiptype = shipType;
-		for (let key in shipsInfo) {
-			if (shipsInfo[key][0] == x && shipsInfo[key][1] == y) {
+
+		let hitOrMiss = false;
+		let canFire = true;
+
+		for (let element in shipsInfo) {
+			if (shipsInfo[element][0] == x && shipsInfo[element][1] == y) {
 				isThereShip = true;
-				shiptype = key;
+				shiptype = element;
 			}
 		}
 
@@ -33,12 +36,20 @@ function Board({ enemyBoard }) {
 					<div>{TopGuide[x]}</div>
 				</Guide>
 			);
-		if (x === 0)
+		if (x === 0) {
+			if (isEnemyBoard) return <div key={key}></div>;
 			return (
 				<Guide key={key} classname='guide'>
 					<div>{SideGuide[y]}</div>
 				</Guide>
 			);
+		}
+		if (board) {
+			let newX = x - 1;
+			let newy = y - 1;
+			hitOrMiss = board[newy][newX] == 3 ? 'hit' : board[newy][newX] == 4 ? 'miss' : '';
+		}
+
 		return (
 			<Square
 				x={x}
@@ -46,6 +57,9 @@ function Board({ enemyBoard }) {
 				key={key}
 				isShipHere={isThereShip}
 				shiptype={shiptype}
+				isEnemySquare={isEnemyBoard}
+				hitOrMiss={hitOrMiss}
+				canFire={canFire}
 				classname={'square'}></Square>
 		);
 	};
@@ -55,7 +69,11 @@ function Board({ enemyBoard }) {
 		squares.push(renderSquare(i, shipPosition));
 	}
 
-	return <div className='board'>{squares}</div>;
+	return (
+		<div key={isEnemyBoard ? 'enemy' : 'my'} className='board'>
+			{squares}
+		</div>
+	);
 }
 
 export default Board;
