@@ -3,7 +3,6 @@
 	font-family: 'Roboto', sans-serif;
 	margin: 0;
 }
-
 .game-container {
 	margin-top: 10px;
 	display: flex;
@@ -15,7 +14,6 @@
 	font-size: 0.9em;
 	margin-left: 2%;
 }
-
 .board-container {
 	margin-right: 20%;
 }
@@ -33,11 +31,9 @@
 	padding-left: 10px;
 	gap: 20px;
 }
-
 .dropdown-menu {
 	background-color: black;
 }
-
 .how-to-play {
 	position: fixed;
 	height: 100vh;
@@ -50,14 +46,12 @@
 	align-items: center;
 	background-color: rgba(0, 0, 0, 0.5);
 }
-
 .how-to-play .info {
 	position: relative;
 	background-color: rgba(255, 255, 255, 0.95);
 	width: 50%;
 	padding: 20px 40px 30px;
 }
-
 .info-close-btn {
 	position: absolute;
 	top: 0;
@@ -66,14 +60,12 @@
 	margin-top: 5px;
 	cursor: pointer;
 }
-
 .board {
 	height: 528px;
 	width: 528px;
 	display: grid;
 	grid-template-columns: repeat(11, 1fr);
 }
-
 .square {
 	display: flex;
 	width: 48px;
@@ -81,6 +73,43 @@
 	background: url('/src/assets/water.svg') no-repeat;
 	background-size: cover;
 	background-position: center;
+}
+.enemy-square {
+	width: 48px;
+	height: 48px;
+	background: url('/src/assets/enemyBoard.svg') no-repeat;
+	background-size: cover;
+	background-position: center;
+	border-right: 1px solid #fff;
+	border-bottom: 1px solid #fff;
+	position: relative;
+	cursor: pointer;
+}
+
+.enable:hover {
+	opacity: 0.9;
+}
+.enable:hover::before {
+	content: '';
+	border-radius: 50%;
+	border: 6px solid #262c40;
+	width: 10px;
+	height: 10px;
+	margin: 18.5px auto 30px;
+	display: block;
+}
+.hit {
+	background-position: center;
+	cursor: not-allowed;
+}
+.miss {
+	background-position: center;
+	cursor: not-allowed;
+}
+.disable {
+	background-color: #fff;
+	opacity: 0.7;
+	cursor: not-allowed;
 }
 
 .guide {
@@ -94,7 +123,6 @@
 	border-right: 1px solid #fff;
 	border-bottom: 1px solid #fff;
 }
-
 .shiplist {
 	display: flex;
 }
