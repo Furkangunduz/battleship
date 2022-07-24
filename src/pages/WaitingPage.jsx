@@ -5,6 +5,7 @@ import SocketContext from '../SocketContext';
 import UserContext from '../UserContext';
 import { useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function WaitingPage({ navigate }) {
 	const { socket } = useContext(SocketContext);
