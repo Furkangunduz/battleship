@@ -1,15 +1,18 @@
 import { createContext, useState } from 'react';
 
-const BoardContext = createContext();
+const BattleContext = createContext();
 
-export const UserProvider = ({ children }) => {
-	const [myBoard, setmyBoard] = useState(null);
+export const BattleProvider = ({ children }) => {
+	const [myBoard, setMyBoard] = useState(null);
 	const [enemyBoard, setEnemyBoard] = useState(null);
+	const [isMyTurn, setIsMyTurn] = useState(false);
+
 	return (
-		<BoardContext.Provider value={{ myBoard, setmyBoard, enemyBoard, setEnemyBoard }}>
+		<BattleContext.Provider
+			value={{ myBoard, setMyBoard, enemyBoard, setEnemyBoard, isMyTurn, setIsMyTurn }}>
 			{children}
-		</BoardContext.Provider>
+		</BattleContext.Provider>
 	);
 };
 
-export default BoardContext;
+export default BattleContext;
