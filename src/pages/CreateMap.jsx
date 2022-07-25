@@ -125,11 +125,8 @@ function CreateMap({ navigate }) {
 
 	return (
 		<>
-			<h1 style={{ textAlign: 'center', marginBottom: '10px' }}>PLACE YOUR SHIPS</h1>
 			<div className='game-container'>
-				<div className='game-history'>
-					<History />
-				</div>
+				<h1 style={{ textAlign: 'center', marginBottom: '10px' }}>PLACE YOUR SHIPS</h1>
 				<div className='board-container'>
 					<div className='board-and-ships'>
 						<Board />
