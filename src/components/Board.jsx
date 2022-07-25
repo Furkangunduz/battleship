@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import ShipContext from '../ShipContext';
+import BattleContext from '../BattleContext';
 
 import Square from './Square';
 import Guide from './Guide';
@@ -10,6 +11,7 @@ const SideGuide = [' ', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
 function Board({ isEnemyBoard, board }) {
 	const { shipPosition, shipsInfo, shipType } = useContext(ShipContext);
+	const { isMyTurn } = useContext(BattleContext);
 
 	const renderSquare = (i) => {
 		const x = i % 11;
@@ -70,7 +72,10 @@ function Board({ isEnemyBoard, board }) {
 	}
 
 	return (
-		<div key={isEnemyBoard ? 'enemy' : 'my'} className='board'>
+		<div
+			style={{ opacity: isEnemyBoard && !isMyTurn && '.7' }}
+			key={isEnemyBoard ? 'enemy' : 'my'}
+			className='board'>
 			{squares}
 		</div>
 	);

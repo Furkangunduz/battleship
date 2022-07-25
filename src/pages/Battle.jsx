@@ -3,16 +3,16 @@ import { useEffect, useContext, useState } from 'react';
 import ShipContext from '../ShipContext';
 import SocketContext from '../SocketContext';
 import UserContext from '../UserContext';
+import BattleContext from '../BattleContext';
 import { toast } from 'react-toastify';
 
 function Battle({ navigate }) {
 	const { setIsBattleStart } = useContext(ShipContext);
 	const { socket } = useContext(SocketContext);
 	const { userData, enemyName } = useContext(UserContext);
-	const [myBoard, setmyBoard] = useState(null);
-	const [enemyBoard, setenemyBoard] = useState(null);
+	const { myBoard, setMyBoard, enemyBoard, setEnemyBoard, isMyTurn, setIsMyTurn } =
+		useContext(BattleContext);
 
-	useEffect(() => {}, []);
 	useEffect(() => {
 		setIsBattleStart(true);
 		socket.on('not_your_turn', () => {
@@ -21,9 +21,10 @@ function Battle({ navigate }) {
 		socket.on('new_map', (new_map) => {
 			new_map.forEach((player) => {
 				if (player[0] == enemyName) {
-					setenemyBoard(player[1]);
+					setEnemyBoard(player[1]);
 				} else {
-					setmyBoard(player[1]);
+					setIsMyTurn(player[2]);
+					setMyBoard(player[1]);
 				}
 			});
 		});
@@ -39,6 +40,11 @@ function Battle({ navigate }) {
 		<div className='battle-container'>
 			<div className='players-name'>
 				<p>{userData.userName}</p>
+				<p>
+					{isMyTurn
+						? `Waiting for ${userData.userName}'s move ...`
+						: `Waiting for ${enemyName}'s move ...`}
+				</p>
 				<p>{enemyName}</p>
 			</div>
 			<div className='boards-container'>

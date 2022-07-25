@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { ShipProvider } from "./ShipContext"
 import { SocketProvider } from "./SocketContext"
 import { UserProvider } from './UserContext';
+import { BattleProvider } from './BattleContext';
 
 import { ToastContainer } from 'react-toastify';
 import App from './App';
@@ -19,24 +20,25 @@ import App from './App';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <UserProvider>
-
     <ShipProvider>
-      <BrowserRouter>
-        <SocketProvider>
-          <App />
-          <ToastContainer
-            position="bottom-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
-        </SocketProvider>
-      </BrowserRouter>
+      <BattleProvider>
+        <BrowserRouter>
+          <SocketProvider>
+            <App />
+            <ToastContainer
+              position="bottom-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
+          </SocketProvider>
+        </BrowserRouter>
+      </BattleProvider>
     </ShipProvider>
   </UserProvider>
 );
