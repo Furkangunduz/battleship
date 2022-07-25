@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useEffect } from 'react';
 
 const ShipContext = createContext();
 
@@ -11,12 +11,14 @@ export const ShipProvider = ({ children }) => {
 		'4': [-1, -1, 'horizontal', 4],
 		'5': [-1, -1, 'horizontal', 5],
 	});
-
-	if (sessionStorage.getItem('shipsInfo')) {
-		setTimeout(() => {
-			setShipsInfo(JSON.parse(sessionStorage.getItem('shipsInfo')));
-		}, 100);
-	}
+	useEffect(() => {
+		if (sessionStorage.getItem('shipsInfo')) {
+			console.log('session');
+			setTimeout(() => {
+				setShipsInfo(JSON.parse(sessionStorage.getItem('shipsInfo')));
+			}, 100);
+		}
+	}, []);
 
 	const [shipType, setShipType] = useState('0');
 	const [isBattleStart, setIsBattleStart] = useState(false);
