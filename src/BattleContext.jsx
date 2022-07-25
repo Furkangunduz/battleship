@@ -6,10 +6,20 @@ export const BattleProvider = ({ children }) => {
 	const [myBoard, setMyBoard] = useState(null);
 	const [enemyBoard, setEnemyBoard] = useState(null);
 	const [isMyTurn, setIsMyTurn] = useState(false);
+	const [winner, setWinner] = useState(null);
 
 	return (
 		<BattleContext.Provider
-			value={{ myBoard, setMyBoard, enemyBoard, setEnemyBoard, isMyTurn, setIsMyTurn }}>
+			value={{
+				myBoard,
+				setMyBoard,
+				enemyBoard,
+				setEnemyBoard,
+				isMyTurn,
+				setIsMyTurn,
+				winner,
+				setWinner,
+			}}>
 			{children}
 		</BattleContext.Provider>
 	);

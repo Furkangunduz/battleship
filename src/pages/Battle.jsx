@@ -5,13 +5,23 @@ import SocketContext from '../SocketContext';
 import UserContext from '../UserContext';
 import BattleContext from '../BattleContext';
 import { toast } from 'react-toastify';
+import RemainingShips from '../components/RemainingShips';
+import Win from '../components/Win';
 
 function Battle({ navigate }) {
 	const { setIsBattleStart } = useContext(ShipContext);
 	const { socket } = useContext(SocketContext);
 	const { userData, enemyName } = useContext(UserContext);
-	const { myBoard, setMyBoard, enemyBoard, setEnemyBoard, isMyTurn, setIsMyTurn } =
-		useContext(BattleContext);
+	const {
+		myBoard,
+		setMyBoard,
+		enemyBoard,
+		setEnemyBoard,
+		isMyTurn,
+		setIsMyTurn,
+		winner,
+		setWinner,
+	} = useContext(BattleContext);
 
 	useEffect(() => {
 		setIsBattleStart(true);
@@ -35,23 +45,35 @@ function Battle({ navigate }) {
 				navigate(`/`);
 			}, 5000);
 		});
+		socket.on('game-finish', (winner) => {
+			console.log('winner', winner);
+			setWinner(winner);
+		});
 	}, [socket]);
 	return (
-		<div className='battle-container'>
-			<div className='players-name'>
-				<p>{userData.userName}</p>
-				<p>
-					{isMyTurn
-						? `Waiting for ${userData.userName}'s move ...`
-						: `Waiting for ${enemyName}'s move ...`}
-				</p>
-				<p>{enemyName}</p>
+		<>
+			<div className='battle-container'>
+				<div className='players-name'>
+					<p>{userData.userName}</p>
+					<p>
+						{isMyTurn
+							? `Waiting for ${userData.userName}'s move ...`
+							: `Waiting for ${enemyName}'s move ...`}
+					</p>
+					<p>{enemyName}</p>
+				</div>
+
+				<div className='boards-container'>
+					<RemainingShips />
+
+					<Board key={1} isEnemyBoard={false} board={myBoard} />
+					<Board key={2} isEnemyBoard={true} board={enemyBoard} />
+
+					<RemainingShips />
+				</div>
 			</div>
-			<div className='boards-container'>
-				<Board key={1} isEnemyBoard={false} board={myBoard} />
-				<Board key={2} isEnemyBoard={true} board={enemyBoard} />
-			</div>
-		</div>
+			{winner && <Win />}
+		</>
 	);
 }
 
