@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
-	const [socket, setSocket] = useState(io('https://battleshipf.herokuapp.com/'));
+	const [socket, setSocket] = useState(io('https://battleshipkd.herokuapp.com/'));
 	return <SocketContext.Provider value={{ socket }}>{children}</SocketContext.Provider>;
 };
 
