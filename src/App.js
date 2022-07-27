@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
+
 function App() {
   const navigate = useNavigate();
 
@@ -19,7 +20,9 @@ function App() {
         <Route path="/create-map/:userName/:roomName" element={<CreateMap navigate={navigate} />} />
         <Route path="/battle" element={<Battle navigate={navigate} />} />
       </Routes>
-    </DndProvider>)
+    </DndProvider>
+
+  )
 }
 
 export default App;

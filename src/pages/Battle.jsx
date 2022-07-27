@@ -56,7 +56,7 @@ function Battle({ navigate }) {
 			console.log('left');
 			popup('Opponent is left...');
 			setTimeout(() => {
-				navigate(`/`);
+				window.location.href = '/';
 			}, 5000);
 		});
 		socket.on('game-finish', (winner) => {

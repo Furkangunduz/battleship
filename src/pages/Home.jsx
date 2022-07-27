@@ -7,6 +7,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import SocketContext from '../SocketContext';
 import UserContext from '../UserContext';
 import { useState, useContext, useEffect } from 'react';
+import { BrowserView, MobileView } from 'react-device-detect';
 
 function Home({ navigate }) {
 	const [roomExist, setRoomExist] = useState(true);
@@ -67,48 +68,56 @@ function Home({ navigate }) {
 	return (
 		<>
 			<div className='home-container'>
-				<div className='home-header'>
-					<div className='line1'></div>
-					<h4>ready to fight</h4>
-					<h1>B A T T L E S H I P</h1>
-					<div className='line2'></div>
-				</div>
-				<div className='home-ship'>
-					<img src={ship} width={'300px'} alt='BattleShip' />
-				</div>
-				<div className='room-input'>
-					<Form.Control
-						placeholder='Username'
-						value={userData.userName}
-						onChange={(e) =>
-							setUserData((prev) => ({ ...prev, userName: e.target.value }))
-						}
-					/>
-					<InputGroup>
+				<BrowserView>
+					<div className='home-header'>
+						<div className='line1'></div>
+						<h4>ready to fight</h4>
+						<h1>B A T T L E S H I P</h1>
+						<div className='line2'></div>
+					</div>
+					<div className='home-ship'>
+						<img src={ship} width={'300px'} alt='BattleShip' />
+					</div>
+					<div className='room-input'>
 						<Form.Control
-							placeholder='Room name'
-							value={userData.roomName}
+							placeholder='Username'
+							value={userData.userName}
 							onChange={(e) =>
 								setUserData((prev) => ({
 									...prev,
-									roomName: e.target.value,
+									userName: e.target.value,
 								}))
 							}
 						/>
-						<Button
-							variant='success'
-							onClick={createRoom}
-							disabled={!userData.roomName || !userData.userName}>
-							Create
-						</Button>
-						<Button
-							variant='warning'
-							onClick={joinRoom}
-							disabled={!userData.roomName || !userData.userName}>
-							Join
-						</Button>
-					</InputGroup>
-				</div>
+						<InputGroup>
+							<Form.Control
+								placeholder='Room name'
+								value={userData.roomName}
+								onChange={(e) =>
+									setUserData((prev) => ({
+										...prev,
+										roomName: e.target.value,
+									}))
+								}
+							/>
+							<Button
+								variant='success'
+								onClick={createRoom}
+								disabled={!userData.roomName || !userData.userName}>
+								Create
+							</Button>
+							<Button
+								variant='warning'
+								onClick={joinRoom}
+								disabled={!userData.roomName || !userData.userName}>
+								Join
+							</Button>
+						</InputGroup>
+					</div>
+				</BrowserView>
+				<MobileView>
+					<p>This page not avaliable on mobile.</p>
+				</MobileView>
 			</div>
 		</>
 	);
