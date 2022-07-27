@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useContext, useState, useEffect } from 'react';
 import ShipContext from '../ShipContext';
 import SocketContext from '../SocketContext';
+import UserContext from '../UserContext';
 import Rules from '../components/Rules';
 import Button from 'react-bootstrap/Button';
 import { useParams } from 'react-router-dom';
@@ -15,6 +16,7 @@ const ShipNameList = ['', 'Patrol Boat', 'Submarine', 'Destroyer', 'Battleship',
 function CreateMap({ navigate }) {
 	const { rotateShip, shipType, shipsInfo } = useContext(ShipContext);
 	const { socket } = useContext(SocketContext);
+
 	const [gameBoard, setGameBoard] = useState('');
 	const [showPopup, setShowPopup] = useState(false);
 	const [popupMessage, setPopupMessage] = useState('');
@@ -22,19 +24,22 @@ function CreateMap({ navigate }) {
 	const [isMyBoardValid, setIsMyBoardValid] = useState(false);
 	const params = useParams();
 
+	const popup = (message) => {
+		if (!showPopup) {
+			setShowPopup(true);
+			setPopupMessage(message);
+			setTimeout(() => {
+				setShowPopup(false);
+				setPopupMessage('');
+			}, 100);
+		}
+	};
+
 	useEffect(() => {
 		socket.on('board_validation', ({ result }) => {
 			console.log('Boar is valid ? : ', result);
 			if (result) {
-				if (!showPopup) {
-					setShowPopup(true);
-					setPopupMessage('Great! Waiting for your opponent.');
-					setTimeout(() => {
-						setShowPopup(false);
-						setPopupMessage('');
-					}, 100);
-				}
-
+				popup('Great! Waiting for your opponent.');
 				socket.emit('save_map', {
 					'gameBoard': gameBoard,
 					'roomName': params.roomName,
@@ -45,16 +50,9 @@ function CreateMap({ navigate }) {
 					navigate(`/waiting/${params.userName}/${params.roomName}`);
 				}, 6000);
 			} else {
-				setShowPopup(true);
-
-				setPopupMessage(
+				popup(
 					'The ship cannot overlap or be in contact with any other ship, neither by edge nor by corner.'
 				);
-
-				setTimeout(() => {
-					setShowPopup(false);
-					setPopupMessage('');
-				}, 6000);
 			}
 
 			setIsMyBoardValid(result);
@@ -65,6 +63,10 @@ function CreateMap({ navigate }) {
 			setTimeout(() => {
 				navigate(`/`);
 			}, 5000);
+		});
+		socket.on('user_joined', ({ roomName, userName }) => {
+			popup(`${userName} joined to ${roomName}`);
+			console.log(`${userName} joined to ${roomName}`);
 		});
 	}, [socket, gameBoard]);
 

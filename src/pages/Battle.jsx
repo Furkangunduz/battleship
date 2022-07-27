@@ -9,6 +9,9 @@ import RemainingShips from '../components/RemainingShips';
 import Win from '../components/Win';
 
 function Battle({ navigate }) {
+	const [showPopup, setShowPopup] = useState(false);
+	const [popupMessage, setPopupMessage] = useState('');
+
 	const { setIsBattleStart } = useContext(ShipContext);
 	const { socket } = useContext(SocketContext);
 	const { userData, enemyName } = useContext(UserContext);
@@ -23,10 +26,21 @@ function Battle({ navigate }) {
 		setWinner,
 	} = useContext(BattleContext);
 
+	const popup = (message) => {
+		if (!showPopup) {
+			setShowPopup(true);
+			setPopupMessage(message);
+			setTimeout(() => {
+				setShowPopup(false);
+				setPopupMessage('');
+			}, 100);
+		}
+	};
+
 	useEffect(() => {
 		setIsBattleStart(true);
 		socket.on('not_your_turn', () => {
-			toast('Not your turn.');
+			popup('Not your turn.');
 		});
 		socket.on('new_map', (new_map) => {
 			new_map.forEach((player) => {
@@ -40,7 +54,7 @@ function Battle({ navigate }) {
 		});
 		socket.on('opponent-left', () => {
 			console.log('left');
-			toast('Opponent is left...');
+			popup('Opponent is left...');
 			setTimeout(() => {
 				navigate(`/`);
 			}, 5000);
@@ -49,7 +63,13 @@ function Battle({ navigate }) {
 			console.log('winner', winner);
 			setWinner(winner);
 		});
+		socket.on('socket');
 	}, [socket]);
+
+	if (showPopup) {
+		toast(popupMessage);
+	}
+
 	return (
 		<>
 			<div className='battle-container'>

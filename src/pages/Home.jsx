@@ -9,30 +9,41 @@ import UserContext from '../UserContext';
 import { useState, useContext, useEffect } from 'react';
 
 function Home({ navigate }) {
-	const [state, setState] = useState({ roomName: '', userName: '' });
 	const [roomExist, setRoomExist] = useState(true);
 	const [roomfull, setRoomfull] = useState(true);
-
+	const [showPopup, setShowPopup] = useState(false);
+	const [popupMessage, setPopupMessage] = useState('');
 	const { socket } = useContext(SocketContext);
 	const { userData, setUserData } = useContext(UserContext);
+
+	const popup = (message) => {
+		if (!showPopup) {
+			setShowPopup(true);
+			setPopupMessage(message);
+			setTimeout(() => {
+				setShowPopup(false);
+				setPopupMessage('');
+			}, 100);
+		}
+	};
 
 	useEffect(() => {
 		socket.on('room_already_exist', () => {
 			setRoomExist(true);
-			toast.error('Room already exist. Change your room name.');
+			popup('Room already exist. Change your room name.');
 		});
 		socket.on('room_successfuly_created', () => {
 			setRoomExist(false);
 		});
 		socket.on('room_is_full', () => {
-			toast.error(`Room is full`);
 			setRoomfull(true);
+			popup(`Room is full`);
 		});
 		socket.on('succesfully_joined', () => {
 			setRoomfull(false);
 		});
 		socket.on('room_not_exist', () => {
-			toast.error(`Room is not exist`);
+			popup(`Room is not exist`);
 		});
 	}, [socket]);
 
@@ -47,6 +58,10 @@ function Home({ navigate }) {
 		setTimeout(() => {
 			navigate(`/create-map/${userData.userName}/${userData.roomName}`);
 		}, 2000);
+	}
+
+	if (showPopup) {
+		toast(popupMessage);
 	}
 
 	return (
