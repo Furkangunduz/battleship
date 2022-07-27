@@ -66,9 +66,24 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(0, 0, 0, 0.8);
 	z-index: 9;
 }
+.win-container {
+	background-color: rgba(255, 255, 255, 0.8);
+	height: 500px;
+	width: 700px;
+	display: flex;
+	justify-content: center;
+}
+.win-text {
+	display: flex;
+	height: 100%;
+	flex-direction: column;
+	justify-content: center;
+	align-content: center;
+}
+
 .how-to-play .info {
 	position: relative;
 	background-color: rgba(255, 255, 255, 0.95);
